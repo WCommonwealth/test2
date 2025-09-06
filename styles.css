@@ -11,6 +11,7 @@ body {
   color: #fff;
   overflow-x: hidden;
   line-height: 1.6;
+  word-break: break-word; /* Added to prevent text overflow */
 }
 
 /* Particles.js Background */
@@ -100,7 +101,6 @@ section {
   border-bottom: 1px solid #800080;
   box-shadow: 0 0 50px rgba(255, 105, 180, 0.9), 0 0 80px rgba(128, 0, 128, 0.7), 0 0 100px rgba(255, 215, 0, 0.3);
   overflow: hidden;
-  margin: 0;
 }
 
 section::before {
@@ -133,8 +133,6 @@ h1, h2 {
   text-shadow: 5px 5px 8px rgba(128, 0, 128, 1), 0 0 40px rgba(255, 105, 180, 1), 0 0 60px rgba(255, 215, 0, 0.5);
   margin-bottom: 20px;
   animation: flicker 1.2s infinite;
-  word-wrap: break-word;
-  max-width: 100%;
 }
 
 h1 {
@@ -150,8 +148,6 @@ p {
   margin-bottom: 20px;
   font-size: 18px;
   color: #ddd;
-  word-wrap: break-word;
-  max-width: 100%;
 }
 
 .subtext {
@@ -242,14 +238,12 @@ a:hover {
   margin-top: 30px;
   background: rgba(26, 0, 26, 0.8);
   border: 2px solid #ff69b4;
-  table-layout: fixed;
 }
 
 #wallet th, #wallet td {
   padding: 15px;
   border: 2px solid #ff69b4;
   text-align: center;
-  word-wrap: break-word;
 }
 
 #wallet th {
@@ -283,7 +277,6 @@ a:hover {
   border-radius: 12px;
   font-size: 16px;
   transition: border-color 0.3s ease;
-  max-width: 100%;
 }
 
 #contact input:focus, #contact textarea:focus {
@@ -295,6 +288,43 @@ a:hover {
 #contact textarea {
   height: 200px;
   resize: vertical;
+}
+
+/* Chat Conversation Styles */
+.chat-conversation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(255, 105, 180, 0.5);
+}
+
+.message {
+  padding: 10px 20px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  max-width: 80%;
+  color: #fff;
+  font-family: monospace;
+  font-size: 14px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 0 10px rgba(128, 0, 128, 0.5);
+  white-space: nowrap; /* Keep without spaces, but allow overflow scroll if needed */
+  overflow-x: auto;
+}
+
+.left {
+  align-self: flex-start;
+  background: linear-gradient(45deg, #800080, #ff69b4);
+}
+
+.right {
+  align-self: flex-end;
+  background: linear-gradient(45deg, #ff69b4, #ffd700);
 }
 
 /* Responsive Design */
@@ -316,6 +346,7 @@ a:hover {
     background: rgba(26, 0, 26, 0.9);
     flex-direction: column;
     padding: 20px;
+    gap: 15px; /* Smaller gap for mobile */
     animation: menuSlideIn 0.5s ease-out;
   }
 
@@ -344,12 +375,53 @@ a:hover {
     font-size: 36px;
   }
 
+  p {
+    font-size: 16px; /* Smaller for mobile */
+  }
+
   .cta-button {
     padding: 12px 25px;
     font-size: 16px;
   }
 
+  .button-group {
+    flex-direction: column; /* Stack buttons on mobile */
+  }
+
   #wallet table {
     font-size: 14px;
+  }
+
+  .chat-conversation {
+    max-width: 100%;
+    padding: 5px;
+  }
+
+  .message {
+    font-size: 12px;
+    max-width: 90%;
+  }
+
+  /* Ensure no overflow in sections */
+  section {
+    overflow-x: hidden;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 36px;
+  }
+
+  h2 {
+    font-size: 28px;
+  }
+
+  p {
+    font-size: 14px;
+  }
+
+  .cta-button {
+    width: 100%; /* Full width on very small screens */
   }
 }
