@@ -96,13 +96,13 @@ function initAnimations() {
   // Particles.js with new colors
   particlesJS("particles-js", {
     particles: {
-      number: { value: 100, density: { enable: true, value_area: 800 } },
+      number: { value: 50, density: { enable: true, value_area: 800 } },
       color: { value: ["#ff69b4", "#800080", "#ffd700"] },
       shape: { type: "triangle", polygon: { nb_sides: 3 } },
-      opacity: { value: 0.8, random: true },
-      size: { value: 8, random: true },
-      line_linked: { enable: true, distance: 200, color: "#ff69b4", opacity: 0.6, width: 2 },
-      move: { enable: true, speed: 6, direction: "none", random: true, straight: false, out_mode: "out" }
+      opacity: { value: 0.6, random: true },
+      size: { value: 6, random: true },
+      line_linked: { enable: true, distance: 150, color: "#ff69b4", opacity: 0.4, width: 1 },
+      move: { enable: true, speed: 4, direction: "none", random: true, straight: false, out_mode: "out" }
     },
     interactivity: {
       detect_on: "canvas",
@@ -114,17 +114,44 @@ function initAnimations() {
   ScrollTrigger.refresh();
 }
 
-// Hamburger Menu
-document.querySelector(".hamburger").addEventListener("click", () => {
+// Hamburger Menu (fixed: simplified toggle, added click-outside close)
+let isAnimating = false;
+document.querySelector(".hamburger").addEventListener("click", (e) => {
+  e.stopPropagation(); // Prevent closing immediately
+  if (isAnimating) return;
+  isAnimating = true;
   const navLinks = document.querySelector(".nav-links");
-  navLinks.classList.toggle("show");
   if (navLinks.classList.contains("show")) {
-    gsap.fromTo(navLinks, { x: "-100%" }, { x: "0%", duration: 0.5, ease: "power2.out" });
-  } else {
     gsap.to(navLinks, { 
       x: "-100%", 
       duration: 0.5, 
-      ease: "power2.in" 
+      ease: "power2.in", 
+      onComplete: () => {
+        navLinks.classList.remove("show");
+        isAnimating = false;
+      }
+    });
+  } else {
+    navLinks.classList.add("show");
+    gsap.fromTo(navLinks, { x: "-100%" }, { 
+      x: "0%", 
+      duration: 0.5, 
+      ease: "power2.out",
+      onComplete: () => { isAnimating = false; }
+    });
+  }
+});
+
+// Close menu on click outside
+document.addEventListener("click", (e) => {
+  const navLinks = document.querySelector(".nav-links");
+  const hamburger = document.querySelector(".hamburger");
+  if (navLinks.classList.contains("show") && !navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+    gsap.to(navLinks, { 
+      x: "-100%", 
+      duration: 0.5, 
+      ease: "power2.in", 
+      onComplete: () => navLinks.classList.remove("show")
     });
   }
 });
@@ -135,6 +162,16 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     e.preventDefault();
     const target = document.querySelector(anchor.getAttribute("href"));
     gsap.to(window, { duration: 1, scrollTo: { y: target.offsetTop - 80, autoKill: false }, ease: "power2.inOut" });
+    // Close menu on link click (for mobile)
+    const navLinks = document.querySelector(".nav-links");
+    if (navLinks.classList.contains("show")) {
+      gsap.to(navLinks, { 
+        x: "-100%", 
+        duration: 0.5, 
+        ease: "power2.in", 
+        onComplete: () => navLinks.classList.remove("show")
+      });
+    }
   });
 });
 
